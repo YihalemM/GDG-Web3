@@ -1,167 +1,149 @@
-# Student Savings Wallet (DSSW)
+# Decentralized Student Savings Wallet (DSSW)
 
-A decentralized Ethereum-based savings wallet built using Solidity.  
-This project allows students and users to securely deposit, store, and withdraw ETH without relying on any centralized authority.  
-All balances and transactions are managed on-chain, ensuring transparency, trustless execution, and user ownership.
+A simple Ethereum smart contract that allows students to securely save, withdraw, and track ETH in a decentralized manner. The project demonstrates practical Web3 concepts such as self-custody, transparency, and trustless execution.
 
 ---
 
-## 🧠 Project Overview
+## 📖 About the Project
 
-The **Decentralized Student Savings Wallet (DSSW)** demonstrates core Web3 and blockchain principles such as:
+The **Decentralized Student Savings Wallet (DSSW)** is a Solidity-based smart contract designed to simulate a real-world decentralized savings system. Users can deposit ETH, withdraw funds when required, and view their transaction history directly on the blockchain.
 
-- Wallet ownership through blockchain addresses
-- Decentralized fund management
-- Transparent and immutable transaction records
-- Secure smart contract execution
-
-Each user interacts with the contract using their own Ethereum wallet and maintains full control over their deposited funds.
+The wallet operates without intermediaries. All funds remain under the control of the user’s Ethereum address, and every transaction is permanently recorded on the Ethereum blockchain. The contract is deployed on the **Sepolia Ethereum Testnet** and interacted with using **MetaMask** and **Remix IDE**.
 
 ---
 
-## 🎯 Learning Objectives
+## 🎯 Learning Goals
 
-- Understand decentralized wallet ownership using `msg.sender`
-- Apply Solidity fundamentals: mappings, structs, arrays, and functions
-- Deploy and interact with smart contracts using Remix and MetaMask
-- Gain experience working with Ethereum test networks
-- Build confidence in real-world Web3 smart contract development
+This project demonstrates:
 
----
-
-## ✨ Features
-
-- Deposit ETH into a decentralized savings wallet
-- Withdraw ETH with balance validation
-- Per-user balance tracking using mappings
-- On-chain transaction history using structs and arrays
-- Read-only functions for transparency and auditing
-- Publicly verifiable deployment on Ethereum Sepolia testnet
+- Wallet ownership and user control in decentralized systems
+- Solidity fundamentals such as mappings, structs, arrays, and functions
+- Secure handling of ETH deposits and withdrawals
+- Smart contract interaction using Remix and MetaMask
+- Deployment to a public Ethereum test network (Sepolia)
 
 ---
 
-## 🛠 Tech Stack
+## ⚙️ Features
 
-- **Solidity** ^0.8.x
-- **Remix IDE**
-- **MetaMask Wallet**
-- **Ethereum Sepolia Testnet**
-- **Git & GitHub**
-
----
-
-## 📄 Smart Contract
-
-- Contract Name: `StudentSavingsWallet`
-- Language: Solidity
-- License: MIT
+- Deposit ETH into a personal savings wallet
+- Withdraw ETH only when sufficient balance exists
+- Check wallet balance at any time
+- Record deposit and withdrawal history
+- Emit blockchain events for transparency
 
 ---
 
-## 🚀 Deployment Details (Sepolia Testnet)
+## 🛠️ Technology Stack
 
-> _Add these details after deployment_
-
-- **Network:** Sepolia Testnet
-- **Contract Address:** `0xYourContractAddressHere`
-- **Deployment Transaction Hash:** `0xYourDeploymentTxHashHere`
-- **Deployed Using:** Remix IDE
-
-⚠️ **Note:** This contract is deployed on a testnet for educational purposes only.  
-Do NOT use on Ethereum mainnet.
+- **Solidity:** ^0.8.x
+- **Development Tool:** Remix IDE
+- **Wallet:** MetaMask
+- **Blockchain Network:** Sepolia Ethereum Testnet
+- **Platform:** Ethereum (EVM compatible)
 
 ---
 
-## 🧪 How to Interact With the Contract
+## 📂 Project Structure
 
-1. Open **Remix IDE**: https://remix.ethereum.org
-2. Load the contract from this GitHub repository
-3. Compile using Solidity compiler ^0.8.x
-4. Connect MetaMask using **Injected Provider**
-5. Ensure MetaMask is on **Sepolia Testnet**
-6. Deploy or attach to the deployed contract address
-7. Interact with:
-   - `deposit()` → Send test ETH
-   - `withdraw(amount)` → Withdraw ETH
-   - `getBalance()` → Check balance
-   - `getTransactions()` → View transaction history
+StudentSavingsWallet/
+├── contracts/
+│ └── StudentSavingsWallet.sol # Main smart contract
+├── screenshots/
+│ ├── deployment.png # Contract deployment proof
+│ ├── deposit.png # ETH deposit interaction
+│ └── withdraw.png # ETH withdrawal interaction
+├── README.md # Project documentation
 
 ---
 
-## 📸 Screenshots (Proof of Work)
+## 📜 Smart Contract Design
 
-### 1️⃣ Contract Deployment (Sepolia)
+### Data Storage
 
-> Screenshot showing successful deployment in Remix
+- **Balances:** A mapping is used to store ETH balances for each user address
+- **Transactions:** A struct and array are used to record deposit and withdrawal activities
 
-![Deployment Screenshot](screenshots/deployment.png)
+### Core Functions
 
----
-
-### 2️⃣ ETH Deposit Transaction
-
-> Screenshot showing ETH deposit via `deposit()` function
-
-![Deposit Screenshot](screenshots/deposit.png)
-
----
-
-### 3️⃣ Balance Check
-
-> Screenshot showing balance returned by `getBalance()`
-
-![Balance Screenshot](screenshots/balance.png)
-
----
-
-### 4️⃣ ETH Withdrawal
-
-> Screenshot showing successful withdrawal transaction
-
-![Withdrawal Screenshot](screenshots/withdraw.png)
-
----
-
-### 5️⃣ MetaMask Confirmation
-
-> Screenshot showing MetaMask transaction confirmation
-
-![MetaMask Screenshot](screenshots/metamask.png)
-
----
-
-## 📁 Project Structure
-
-StudentSavingWallet/
-├── StudentSavingsWallet.sol
-├── README.md
-└── screenshots/
-├── deployment.png
-├── deposit.png
-├── balance.png
-├── withdraw.png
-└── metamask.png
+| Function                   | Description                                 |
+| -------------------------- | ------------------------------------------- |
+| `deposit()`                | Allows users to deposit ETH into the wallet |
+| `withdraw(uint256 amount)` | Withdraws ETH if sufficient balance exists  |
+| `checkBalance()`           | Returns the caller’s wallet balance         |
+| `getTransactionHistory()`  | Returns recorded transactions               |
 
 ---
 
 ## 🔐 Security Considerations
 
-- Users can only withdraw their own deposited ETH
-- Balance checks prevent overdrawing
-- Smart contract logic enforces trustless execution
-- All transactions are publicly verifiable on-chain
+- User balance is updated before transferring ETH to prevent reentrancy risks
+- Solidity ^0.8.x includes built-in overflow and underflow protection
+- Withdrawals are restricted to available balances only
 
 ---
 
-## 👨‍🎓 Author
+## 🚀 Deployment Information
 
-- **Project:** Web3 Track – Mini Project Assignment
-- **Title:** Decentralized Student Savings Wallet (DSSW)
-- **Developer:** \_Yihalem Mulat
-- **Institution:** \_AASTU / GDG_web3
+- **Network:** Sepolia Ethereum Testnet
+- **Contract Name:** StudentSavingsWallet
+- **Contract Address:** `0xYourContractAddressHere`
+- **Deployment Transaction Hash:** `0xYourTransactionHashHere`
 
 ---
 
-## 📜 License
+## 🧪 How to Use the Contract
 
-This project is licensed under the **MIT License**.
+1. Open Remix IDE in your browser
+2. Connect MetaMask and switch to the Sepolia network
+3. Compile and deploy the `StudentSavingsWallet` contract
+4. Call `deposit()` with ETH value to save funds
+5. Call `withdraw(amount)` to retrieve ETH
+6. Use `checkBalance()` to view wallet balance
+
+---
+
+## 📸 Screenshots (Submission Evidence)
+
+> Replace placeholders with real screenshots after deployment
+
+- Contract deployment confirmation  
+  ![Deployment Screenshot](screenshots/deployment.png)
+
+- ETH deposit transaction  
+  ![Deposit Screenshot](screenshots/deposit.png)
+
+- ETH withdrawal transaction  
+  ![Withdrawal Screenshot](screenshots/withdraw.png)
+
+---
+
+## 📂 Submission Checklist
+
+- Solidity smart contract source code
+- Deployed contract address
+- Deployment transaction hash
+- Screenshots showing successful interaction
+
+---
+
+## ✨ Optional Enhancements
+
+- Minimum deposit amount
+- Time-lock mechanism for withdrawals
+- Admin or owner role
+- Extended transaction filtering
+
+---
+
+## 👤 Author
+
+**Yihalem**  
+Final-Year Engineering Student  
+Web3 & Blockchain Developer
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
