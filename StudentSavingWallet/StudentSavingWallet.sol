@@ -15,10 +15,10 @@ contract StudentSavingWallet {
 
     // Array to store all transactions
     Transaction[] private transactions;
+    //Events
+    event Deposit(address indexed user, uint256 amount, uint256 timestamp);
+    event Withdrawal(address indexed user, uint256 amount, uint256 timestamp);
 
-    // ----------------------------
-    // Deposit Function
-    // ----------------------------
     function deposit() public payable {
         require(msg.value > 0, "Deposit amount must be greater than zero");
 
@@ -34,11 +34,9 @@ contract StudentSavingWallet {
                 timestamp: block.timestamp
             })
         );
+        emit Deposit(msg.sender, msg.value, block.timestamp);
     }
 
-    // ----------------------------
-    // Withdraw Function
-    // ----------------------------
     function withdraw(uint256 amount) public {
         require(balances[msg.sender] >= amount, "Insufficient balance");
 
@@ -58,11 +56,8 @@ contract StudentSavingWallet {
                 timestamp: block.timestamp
             })
         );
+        emit Withdrawal(msg.sender, amount, block.timestamp);
     }
-
-    // ----------------------------
-    // View Functions
-    // ----------------------------
 
     // Check wallet balance
     function checkBalance() public view returns (uint256) {
