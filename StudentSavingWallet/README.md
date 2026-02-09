@@ -167,9 +167,7 @@ StudentSavingsWallet/
 
 ## 👤 Author
 
-**Yihalem M**  
-Final-Year Engineering Student  
-Web3 & Blockchain Developer
+**Yihalem M**
 
 ---
 
