@@ -1,75 +1,58 @@
-# SavingsBank - Ethereum Smart Contract Project
+# Savings Bank - Ethereum Smart Contract
 
-A simple Ethereum **Savings Bank** smart contract using **Foundry**, allowing users to deposit and withdraw ETH safely.
-
----
-
-## Features
-
-- Users can deposit ETH.
-- Tracks each user’s balance.
-- Users can withdraw their own funds.
-- Prevents withdrawing more than balance.
-- Emits events on deposit and withdrawal.
-- Check individual user balances.
-- Check total ETH stored.
-- **Bonus:** Withdrawal cooldown (1 minute).
+A simple Ethereum **Savings Bank** smart contract that allows users to **deposit, withdraw, and track ETH** in a decentralized and secure manner. This project demonstrates **Web3 concepts** such as self-custody, trustless execution, and transparency.
 
 ---
 
-## Project Requirements
+## 📖 About the Project
 
-### 1. Contract (inside `src/`)
+The **Savings Bank** smart contract is a Solidity-based project built with **Foundry**. Users can deposit ETH, withdraw their funds while respecting balance and cooldown rules, and check their balances. All actions are **recorded on-chain**, and events are emitted for deposits and withdrawals.
 
-Create `SavingsBank.sol`. Your contract must:
-
-1. Allow users to deposit ETH.
-2. Track each user’s balance using a mapping.
-3. Allow users to withdraw their own funds.
-4. Prevent users from withdrawing more than their balance.
-5. Emit events when:
-   - A deposit is made
-   - A withdrawal is made
-6. Include a function to check a user’s balance.
-7. Include a function that returns the total ETH stored in the contract.
+The project includes **unit tests** to verify functionality and a **deployment script** for local or testnet deployment.
 
 ---
 
-### 2. Testing (inside `test/`)
+## 🎯 Learning Goals
 
-Write a test file for the contract. Your tests must verify:
+This project demonstrates:
 
-- A user can deposit ETH successfully.
-- The balance updates correctly.
-- A user cannot withdraw more than their balance.
-- After withdrawal, the balance updates correctly.
-- The contract total balance reflects deposits.
-
-**Bonus:** Test multiple users depositing and withdrawing.
+- Solidity fundamentals: mappings, functions, events, and modifiers
+- Handling ETH deposits and withdrawals securely
+- Implementing cooldowns and owner-only functions
+- Writing unit tests with **Foundry**
+- Deploying and interacting with smart contracts using `forge` and `anvil`
 
 ---
 
-### 3. Local Blockchain
+## ⚙️ Features
 
-Start a local blockchain using `anvil`.
+### User Features
+
+- **Deposit ETH:** Users can deposit ETH into their personal account.
+- **Minimum Deposit:** Deposits must meet a minimum threshold.
+- **Withdraw ETH:** Users can withdraw ETH up to their balance.
+- **Withdrawal Cooldown:** Prevents frequent withdrawals (1 minute cooldown).
+- **Check Balance:** Users can check their balance at any time.
+- **Total Balance:** The contract tracks total ETH stored.
+- **Events:** Deposits and withdrawals emit events with sender, amount, and timestamp.
+
+### Owner-Only Features
+
+- **Emergency Withdraw:** Allows the owner to withdraw all funds.
+- **Access Control:** Only the owner can call emergency withdraw.
 
 ---
 
-### 4. Deployment (inside `script/`)
+## 🛠️ Technology Stack
 
-- Write a deployment script in the `script/` folder.
-- Deploy the contract locally.
-- Confirm deployment was successful.
-
-**Bonus Challenge:** Add one of the following:
-
-- A minimum deposit requirement.
-- A withdrawal cooldown (e.g., users can only withdraw once every 1 minute).
-- Owner-only emergency withdraw function.
+- **Solidity:** ^0.8.33
+- **Development Tool:** Foundry (forge, cast, anvil)
+- **Local Blockchain:** Anvil
+- **Testing Framework:** Forge Std (`Test.sol`)
 
 ---
 
-## Project Structure
+## 📂 Project Structure
 
 ```text
 savings-bank/
@@ -79,89 +62,137 @@ savings-bank/
 │   └── SavingsBank.t.sol        # Unit tests
 ├── script/
 │   └── DeploySavingsBank.s.sol  # Deployment script
+├── screenshots/                 # Screenshots of tests, deployment, and outputs
 └── README.md
 ```
 
-## Setup & Usage
+## 📜 Smart Contract Design
 
-### 1. Install Foundry
+### Data Storage
+
+- **balances:** Tracks ETH balance per user.
+- **lastWithdrawal:** Tracks last withdrawal timestamp for cooldown.
+- **owner:** Contract deployer for emergency actions.
+
+### Core Functions
+
+| Function                | Description                                             |
+| ----------------------- | ------------------------------------------------------- |
+| `deposit()`             | Deposit ETH into the user's account                     |
+| `withdraw(uint256 amt)` | Withdraw ETH if sufficient balance and cooldown elapsed |
+| `getBalance(address)`   | Returns the balance of a specific user                  |
+| `getTotalBalance()`     | Returns total ETH stored in the contract                |
+| `emergencyWithdraw()`   | Owner-only function to withdraw all ETH                 |
+
+## 🔐 Security Considerations
+
+- Update balances **before transfers** to prevent reentrancy attacks.
+- Withdrawals restricted by **balance** and **cooldown**.
+- Owner-only functions enforced via access control.
+- Solidity ^0.8.x provides built-in overflow/underflow protection.
+- Every deposit and withdrawal emits **events** for transparency.
+
+---
+
+## 🚀 Deployment Instructions
+
+### 1. Start Local Blockchain
 
 ```bash
-curl -L https://foundry.paradigm.xyz | bash
-foundryup
-# SavingsBank - Setup & Usage
+anvil
+```
 
-## 2. Build & Test Contract
+- Keep this terminal running while deploying or interacting with contracts.
+- Note the **RPC URL** (default: `http://127.0.0.1:8545`) and **private keys** — needed for deployment/testing.
+
+---
+
+### 2. Compile & Test Contract
+
+````bash
 forge build
 forge test -vv
-
 ✅ Tests verify:
+
 - Deposits work
 - Withdrawals work
 - Over-withdrawal prevented
 - Balance updates correctly
-- Multiple users
-- Total balance tracked
+- Total contract balance tracked
+- Owner-only emergency withdraw
+- Withdrawal cooldown enforced
 
-## 3. Start Local Blockchain
-anvil
+---
 
-- Displays private keys and RPC URL: http://127.0.0.1:8545
-- Keep it running during deployment and testing.
+### 3. Deploy Contract Locally
 
-## 4. Deploy Contract Locally
-forge script script/DeploySavingsBank.s.sol --rpc-url http://127.0.0.1:8545 --private-key <YOUR_ANVIL_KEY> --broadcast
+```bash
+forge script script/DeploySavingsBank.s.sol \
+  --rpc-url http://127.0.0.1:8545 \
+  --private-key <YOUR_ANVIL_KEY> \
+  --broadcast
+  - Copy the contract address from the output.
+- Example: `0x700b6A60ce7EaaEA56F065753d8dcB9653dbAD35`
 
-- Copy the Contract Address from the output.
-- Example: 0x700b6A60ce7EaaEA56F065753d8dcB9653dbAD35
+---
 
-## 5. Example Usage (Live Interaction)
+### 4. Interact with Contract
 
-Deposit ETH:
-cast send <CONTRACT_ADDRESS> "deposit()" --value 1ether --private-key <YOUR_ANVIL_KEY> --rpc-url http://127.0.0.1:8545
+#### Deposit ETH
 
-Withdraw ETH:
-cast send <CONTRACT_ADDRESS> "withdraw(uint256)" 0.5ether --private-key <YOUR_ANVIL_KEY> --rpc-url http://127.0.0.1:8545
+```bash
+cast send <CONTRACT_ADDRESS> "deposit()" --value 1ether \
+  --private-key <YOUR_ANVIL_KEY> \
+  --rpc-url http://127.0.0.1:8545
+  #### Withdraw ETH
 
-Check User Balance:
-cast call <CONTRACT_ADDRESS> "getBalance(address)" <USER_ADDRESS> --rpc-url http://127.0.0.1:8545
+```bash
+cast send <CONTRACT_ADDRESS> "withdraw(uint256)" 0.5ether \
+  --private-key <YOUR_ANVIL_KEY> \
+  --rpc-url http://127.0.0.1:8545
+  #### Check User Balance
 
-Check Contract Total Balance:
-cast call <CONTRACT_ADDRESS> "totalBalance()" --rpc-url http://127.0.0.1:8545
+```bash
+cast call <CONTRACT_ADDRESS> "getBalance(address)" <USER_ADDRESS> \
+  --rpc-url http://127.0.0.1:8545
+  #### Check Contract Total Balance
 
-## 6. Screenshots (Add Your Own)
-Test Results:
-*Add your screenshots here.*
+```bash
+cast call <CONTRACT_ADDRESS> "totalBalance()" \
+  --rpc-url http://127.0.0.1:8545
 
-Deployment Successful:
-*Add your deployment screenshot here.*
+  ## 📸 Screenshots (Evidence)
 
-## 7. Git & GitHub
-Initialize Git:
-git init
-git add .
-git commit -m "Initial commit - SavingsBank smart contract"
+- **Test Results**
+  ![Test Results](screenshots/Forge-test_result.jpg)
 
-Create GitHub Repo:
-- Go to GitHub → New repository
-- Name: savings-bank
-- Public → Do NOT initialize with README
-- Click Create repository
+---
 
-Link Local Repo & Push:
-git remote add origin https://github.com/<YourUsername>/savings-bank.git
-git branch -M main
-git push -u origin main
+## ✨ Bonus Features
 
-## 8. Bonus Features
-Minimum deposit requirement:
-require(msg.value >= 0.01 ether, "Min deposit 0.01 ETH");
+- Minimum deposit requirement: `require(msg.value >= 0.01 ether, "Deposit too small")`
+- Withdrawal cooldown enforced (e.g., 1 minute)
+- Owner-only emergency withdrawal
 
-Withdrawal cooldown (1 minute): tracks last withdrawal per user
+---
 
-Owner-only emergency withdraw function:
-require(msg.sender == owner, "Only owner");
+## 📂 Submission Checklist
 
-## Author
-Your Name – GDG AASTU Web3
-```
+- Solidity smart contract source code
+- Deployed contract address
+- Deployment transaction hash
+- Screenshots showing successful interaction
+- Test results from `forge test`
+
+---
+
+## 👤 Author
+
+**Yihalem M**
+
+---
+
+## 📄 License
+
+MIT License
+````
