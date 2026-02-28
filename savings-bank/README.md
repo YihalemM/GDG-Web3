@@ -109,9 +109,11 @@ anvil
 
 ### 2. Compile & Test Contract
 
-````bash
 forge build
 forge test -vv
+
+---
+
 ✅ Tests verify:
 
 - Deposits work
@@ -126,12 +128,12 @@ forge test -vv
 
 ### 3. Deploy Contract Locally
 
-```bash
 forge script script/DeploySavingsBank.s.sol \
-  --rpc-url http://127.0.0.1:8545 \
-  --private-key <YOUR_ANVIL_KEY> \
-  --broadcast
-  - Copy the contract address from the output.
+ --rpc-url http://127.0.0.1:8545 \
+ --private-key <YOUR_ANVIL_KEY> \
+ --broadcast
+
+- Copy the contract address from the output.
 - Example: `0x700b6A60ce7EaaEA56F065753d8dcB9653dbAD35`
 
 ---
@@ -140,41 +142,38 @@ forge script script/DeploySavingsBank.s.sol \
 
 #### Deposit ETH
 
-```bash
 cast send <CONTRACT_ADDRESS> "deposit()" --value 1ether \
-  --private-key <YOUR_ANVIL_KEY> \
-  --rpc-url http://127.0.0.1:8545
-  #### Withdraw ETH
+ --private-key <YOUR_ANVIL_KEY> \
+ --rpc-url http://127.0.0.1:8545
 
-```bash
+#### Withdraw ETH
+
 cast send <CONTRACT_ADDRESS> "withdraw(uint256)" 0.5ether \
-  --private-key <YOUR_ANVIL_KEY> \
-  --rpc-url http://127.0.0.1:8545
-  #### Check User Balance
-
-```bash
-cast call <CONTRACT_ADDRESS> "getBalance(address)" <USER_ADDRESS> \
-  --rpc-url http://127.0.0.1:8545
-  #### Check Contract Total Balance
-
-```bash
-cast call <CONTRACT_ADDRESS> "totalBalance()" \
-  --rpc-url http://127.0.0.1:8545
-
-  ## 📸 Screenshots (Evidence)
-
-- **Test Results**
-  ![Test Results](screenshots/Forge-test_result.jpg)
+ --private-key <YOUR_ANVIL_KEY> \
+ --rpc-url http://127.0.0.1:8545
 
 ---
+
+#### Check User Balance
+
+cast call <CONTRACT_ADDRESS> "getBalance(address)" <USER_ADDRESS> \
+ --rpc-url http://127.0.0.1:8545
+
+#### Check Contract Total Balance
+
+cast call <CONTRACT_ADDRESS> "totalBalance()" \
+ --rpc-url http://127.0.0.1:8545
+
+## 📸 Screenshots (Evidence)
+
+**Test Results**
+![Test Results](screenshots/Forge-test_result.png)
 
 ## ✨ Bonus Features
 
 - Minimum deposit requirement: `require(msg.value >= 0.01 ether, "Deposit too small")`
 - Withdrawal cooldown enforced (e.g., 1 minute)
 - Owner-only emergency withdrawal
-
----
 
 ## 📂 Submission Checklist
 
@@ -184,15 +183,14 @@ cast call <CONTRACT_ADDRESS> "totalBalance()" \
 - Screenshots showing successful interaction
 - Test results from `forge test`
 
----
-
 ## 👤 Author
 
 **Yihalem M**
 
----
-
 ## 📄 License
 
 MIT License
-````
+
+```
+
+```
