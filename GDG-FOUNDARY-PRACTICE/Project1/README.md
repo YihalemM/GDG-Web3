@@ -1,66 +1,155 @@
-## Foundry
+# Project 1 — Personal Counter
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+A simple Ethereum **Personal Counter** smart contract that allows each user to **track and manage their own counter**. This project demonstrates **Solidity basics**, **user-specific state**, and **unit testing with Foundry**.
 
-Foundry consists of:
+---
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## 📖 About the Project
 
-## Documentation
+The **Personal Counter** smart contract is a Solidity project built with **Foundry**. Each user has a private counter stored on-chain. Users can **increment** or **reset** their own counter but cannot modify others' counters. All actions are **enforced using require statements** and can optionally emit events for transparency.
 
-https://book.getfoundry.sh/
+The project includes **unit tests** to verify functionality and a **deployment script** for local testing.
 
-## Usage
+---
 
-### Build
+## 🎯 Learning Goals
 
-```shell
-$ forge build
+This project demonstrates:
+
+- Solidity fundamentals: mappings, functions, modifiers, and events
+- User-specific data storage using `mapping(address => uint256)`
+- Input validation with `require()`
+- Writing unit tests with **Foundry** (`forge test`)
+- Deploying and interacting with contracts locally using `forge` and `anvil`
+
+---
+
+## ⚙️ Features
+
+### User Features
+
+- **Increment Counter:** Users can increment their personal counter by 1
+- **Reset Counter:** Users can reset their counter to 0
+- **Get Counter:** Users can check their current counter value
+- **Access Control:** Users cannot modify other users' counters
+
+### Optional Features
+
+- **Events:** Emitting events on increment or reset for transparency
+
+---
+
+## 🛠️ Technology Stack
+
+- **Solidity:** ^0.8.33
+- **Development Tool:** Foundry (forge, cast, anvil)
+- **Local Blockchain:** Anvil
+- **Testing Framework:** Forge Std (`Test.sol`)
+
+---
+
+## 📂 Project Structure
+
+```text
+Project1/
+├── src/
+│   └── PersonalCounter.sol
+├── test/
+│   └── PersonalCounter.t.sol
+├── script/
+│   └── PersonalCounter.s.sol
+├── foundry.toml
+├── foundry.lock
+└── README.md
 ```
 
-### Test
+## 📜 Smart Contract Design
 
-```shell
-$ forge test
+- **counters:** `mapping(address => uint256)` storing each user’s counter
+
+### Core Functions
+
+| Function              | Description                      |
+| --------------------- | -------------------------------- |
+| `increment()`         | Increments caller's counter by 1 |
+| `reset()`             | Resets caller's counter to 0     |
+| `getCounter(address)` | Returns the counter of a user    |
+
+**Security:** Users cannot modify others' counters (`require(msg.sender == ...)`)
+
+---
+
+## 🚀 Deployment & Testing
+
+1. **Start local blockchain:**
+
+```bash
+anvil
 ```
 
-### Format
+2. **Compile & Test Contract**
 
-```shell
-$ forge fmt
+```bash
+forge build
+forge test -vv
+✅ Tests verify:
+- Increment works
+- Reset works
+- Users cannot reset another user's counter
+
 ```
 
-### Gas Snapshots
+3. **Deploy Contract Locally**
 
-```shell
-$ forge snapshot
+```bash
+forge script script/PersonalCounter.s.sol \
+ --rpc-url http://127.0.0.1:8545 \
+ --private-key <YOUR_ANVIL_KEY> \
+ --broadcast
+
 ```
 
-### Anvil
+4. **Interact with Contract**
 
-```shell
-$ anvil
+#### Increment Counter
+
+```bash
+cast send <CONTRACT_ADDRESS> "increment()" \
+ --private-key <YOUR_ANVIL_KEY> \
+ --rpc-url http://127.0.0.1:8545
 ```
 
-### Deploy
+#### Reset Counter
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+```bash
+cast send <CONTRACT_ADDRESS> "reset()" \
+ --private-key <YOUR_ANVIL_KEY> \
+ --rpc-url http://127.0.0.1:8545
 ```
 
-### Cast
+#### Check Counter Value
 
-```shell
-$ cast <subcommand>
+```bash
+cast call <CONTRACT_ADDRESS> "getCounter(address)" <USER_ADDRESS> \
+ --rpc-url http://127.0.0.1:8545
 ```
 
-### Help
+## 📂 Submission Checklist
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+- `PersonalCounter.sol` (smart contract source code)
+- `PersonalCounter.t.sol` (unit tests)
+- `PersonalCounter.s.sol` (deployment script)
+- Deployed contract address
+- Test results from `forge test`
+
+---
+
+## 👤 Author
+
+**Yihalem M**
+
+---
+
+## 📄 License
+
+MIT License
