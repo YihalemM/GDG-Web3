@@ -129,10 +129,17 @@ cast send <CONTRACT_ADDRESS> "reset()" \
 
 #### Check Counter Value
 
-```bash
 cast call <CONTRACT_ADDRESS> "getCounter(address)" <USER_ADDRESS> \
  --rpc-url http://127.0.0.1:8545
-```
+
+---
+
+## 📸 Screenshots (Evidence)
+
+**Test Results**
+![Test Results](screenshots/forge-test-PersonalCounter.png)
+
+---
 
 ## 📂 Submission Checklist
 
@@ -153,3 +160,7 @@ cast call <CONTRACT_ADDRESS> "getCounter(address)" <USER_ADDRESS> \
 ## 📄 License
 
 MIT License
+
+```
+
+```
