@@ -1,66 +1,165 @@
-## Foundry
+# Project 2 — Simple Vault
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+A simple Ethereum **ETH Vault** smart contract that allows users to **deposit and withdraw their ETH securely**. This project demonstrates **Solidity basics**, **user-specific balances**, and **unit testing with Foundry**.
 
-Foundry consists of:
+---
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## 📖 About the Project
 
-## Documentation
+The **Simple Vault** smart contract is a Solidity project built with **Foundry**. Each user can **deposit ETH** and withdraw **only their own balance**. The contract ensures that users **cannot withdraw more than their balance** and **resets balances after withdrawal**. All actions are **enforced using require statements** for safety and reliability.
 
-https://book.getfoundry.sh/
+The project includes **unit tests** to verify functionality and a **deployment script** for local testing.
 
-## Usage
+---
 
-### Build
+## 🎯 Learning Goals
 
-```shell
-$ forge build
+This project demonstrates:
+
+- Solidity fundamentals: mappings, functions, and events
+- Tracking user-specific ETH balances using `mapping(address => uint256)`
+- Input validation with `require()`
+- Writing unit tests with **Foundry** (`forge test`)
+- Deploying and interacting with contracts locally using `forge` and `anvil`
+
+---
+
+## ⚙️ Features
+
+### User Features
+
+- **Deposit ETH:** Users can send ETH to the contract and update their balance
+- **Withdraw ETH:** Users can withdraw their own ETH only
+- **Balance Tracking:** Each user's balance is stored separately
+- **Revert on Invalid Withdrawal:** Prevents withdrawing without sufficient balance
+
+### Optional Features
+
+- **Events:** Emitting events on deposit and withdrawal for transparency
+
+---
+
+## 🛠️ Technology Stack
+
+- **Solidity:** ^0.8.33
+- **Development Tool:** Foundry (forge, cast, anvil)
+- **Local Blockchain:** Anvil
+- **Testing Framework:** Forge Std (`Test.sol`)
+
+---
+
+## 📂 Project Structure
+
+```text
+Project2/
+├── src/
+│   └── ETHVault.sol
+├── test/
+│   └── ETHVault.t.sol
+├── script/
+│   └── ETHVault.s.sol
+├── foundry.toml
+├── foundry.lock
+└── README.md
+
 ```
 
-### Test
+## 📜 Smart Contract Design
 
-```shell
-$ forge test
+- **balances:** `mapping(address => uint256)` storing each user’s ETH balance
+
+### Core Functions
+
+| Function       | Description                           |
+| -------------- | ------------------------------------- |
+| `deposit()`    | Allows a user to deposit ETH          |
+| `withdraw()`   | Allows a user to withdraw their ETH   |
+| `getBalance()` | Returns the current balance of a user |
+
 ```
 
-### Format
-
-```shell
-$ forge fmt
 ```
 
-### Gas Snapshots
+Security: Users can withdraw only their own balance. Withdrawals without balance are reverted.
 
-```shell
-$ forge snapshot
+### Deployment & Testing
+
+1. Start local blockchain:
+
+```text
+anvil
 ```
 
-### Anvil
+2. Compile & Test Contract
 
-```shell
-$ anvil
+```text
+forge build
+forge test -vv
 ```
 
-### Deploy
+✅ Tests verify:
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+```text
+Deposit updates balance
+
+Withdraw transfers ETH
+
+Withdraw without balance reverts
 ```
 
-### Cast
+3. Deploy Contract Locally
 
-```shell
-$ cast <subcommand>
+```text
+forge script script/ETHVault.s.sol \
+ --rpc-url http://127.0.0.1:8545 \
+ --private-key <YOUR_ANVIL_KEY> \
+ --broadcast
 ```
 
-### Help
+4. Interact with Contract
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+Deposit ETH
+
+```text
+cast send <CONTRACT_ADDRESS> "deposit()" \
+ --value <AMOUNT_IN_WEI> \
+ --private-key <YOUR_ANVIL_KEY> \
+ --rpc-url http://127.0.0.1:8545
 ```
+
+Withdraw ETH
+
+```text
+cast send <CONTRACT_ADDRESS> "withdraw(uint256)" <AMOUNT_IN_WEI> \
+ --private-key <YOUR_ANVIL_KEY> \
+ --rpc-url http://127.0.0.1:8545
+```
+
+Check Balance
+
+```text
+cast call <CONTRACT_ADDRESS> "getBalance(address)" <USER_ADDRESS> \
+ --rpc-url http://127.0.0.1:8545
+```
+
+### Submission Checklist
+
+```text
+ETHVault.sol (smart contract source code)
+
+ETHVault.t.sol (unit tests)
+
+ETHVault.s.sol (deployment script)
+
+Deployed contract address
+
+Test results from forge test
+```
+
+👤 Author
+
+Yihalem M
+
+📄 License
+
+MIT License
