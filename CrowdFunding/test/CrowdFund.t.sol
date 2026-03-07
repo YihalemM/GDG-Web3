@@ -1,8 +1,8 @@
 // SPDX-License-Identifier:MIT
 pragma solidity ^0.8.33;
 
-import "forge-std/Test.sol";
-import "../src/CrowdFund.sol";
+import {Test} from "forge-std/Test.sol";
+import {CrowdFund} from "../src/CrowdFund.sol";
 
 contract CrowdFundTest is Test {
     CrowdFund crowdfund;
