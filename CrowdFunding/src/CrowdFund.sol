@@ -112,7 +112,11 @@ contract CrowdFund {
         require(campaign.pledged >= campaign.goal, "Goal not reached");
         require(!campaign.claimed, "Already claimed");
         campaign.claimed = true;
-        payable(campaign.owner).transfer(campaign.pledged);
+        (bool sent, ) = payable(campaign.owner).call{value: campaign.pledged}(
+            ""
+        );
+        require(sent, "Failed to send Ether");
+    }
 
     /* =============================================================
                             STEP 6
@@ -126,5 +130,23 @@ contract CrowdFund {
     ============================================================= */
 
     // TODO: Implement refund()
-     
+    function refund(uint256 _campaignId) external {
+        Campaign storage campaign = campaigns[_campaignId];
+
+        // campaign must have ended
+        require(block.timestamp >= campaign.endAt, "Campaign has not ended");
+
+        // refund only if goal NOT reached
+        require(
+            campaign.pledged < campaign.goal,
+            "Goal was reached, cannot refund"
+        );
+
+        uint256 bal = pledgedAmount[_campaignId][msg.sender];
+        require(bal > 0, "No pledged amount");
+
+        pledgedAmount[_campaignId][msg.sender] = 0;
+        (bool sent, ) = payable(msg.sender).call{value: bal}("");
+        require(sent, "Failed to refund Ether");
+    }
 }
