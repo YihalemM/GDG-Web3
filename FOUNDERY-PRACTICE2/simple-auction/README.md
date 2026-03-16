@@ -1,66 +1,196 @@
-## Foundry
+# Simple Auction
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+A simple Ethereum **Auction** smart contract that allows users to **create auctions, place bids, withdraw outbid funds, and end auctions securely**. This project demonstrates **Solidity basics**, **mapping for state tracking**, and **unit testing with Foundry**.
 
-Foundry consists of:
+---
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## 📖 About the Project
 
-## Documentation
+The **Simple Auction** smart contract is a Solidity project built with **Foundry**. Each auction tracks the **seller, highest bidder, highest bid, and end time**. Users can place bids higher than the current highest bid, withdraw funds if outbid, and end auctions once they expire. All operations are enforced using **require statements** for safety and correctness.
 
-https://book.getfoundry.sh/
+The project includes **unit tests** and a **deployment script** for local and testnet deployment.
 
-## Usage
+---
 
-### Build
+## 🎯 Learning Goals
 
-```shell
-$ forge build
+This project demonstrates:
+
+- Solidity fundamentals: structs, mappings, functions, and events
+- Tracking multiple auctions with `mapping(uint256 => Auction)`
+- Handling refundable bids using `mapping(address => uint256)`
+- Input validation with `require()`
+- Writing unit tests with **Foundry** (`forge test`)
+- Deploying and verifying contracts on **Sepolia** testnet using `forge`
+
+---
+
+## ⚙️ Features
+
+### User Features
+
+- **Create Auction:** Sellers can create auctions with a specified duration
+- **Place Bid:** Users can place bids higher than the current highest bid
+- **Withdraw Funds:** Outbid users can withdraw their refundable bids
+- **End Auction:** Sellers can end auctions after the end time, transferring highest bid
+
+### Optional Features
+
+- **Events:** Emitting events on bids and withdrawals for transparency
+
+---
+
+## 🛠️ Technology Stack
+
+- **Solidity:** ^0.8.20
+- **Development Tool:** Foundry (forge, cast, anvil)
+- **Testing Framework:** Forge Std (`Test.sol`)
+- **Blockchain:** Sepolia Testnet for deployment
+
+---
+
+## 📂 Project Structure
+
+```text
+simple-auction
+│
+├── src
+│   └── SimpleAuction.sol        # Solidity contract
+│
+├── script
+│   └── SimpleAuction.s.sol      # Deployment script using Foundry
+│
+├── test
+│   └── simple-auction.t.sol     # Unit tests
+│
+├── lib
+│   └── forge-std                # Foundry standard library
+│
+├── screenshots                  # Screenshots of deployment, tests, verification
+│
+├── .env                         # Environment variables (PRIVATE_KEY, RPC_URL, ETHERSCAN_API_KEY)
+├── foundry.toml                 # Foundry project configuration
+└── README.md                    # Project documentation
 ```
 
-### Test
+## 📜 Smart Contract Design
 
-```shell
-$ forge test
+- **Auction struct:** stores `seller`, `highestBidder`, `highestBid`, `endTime`, `ended`
+- **auctions mapping:** tracks multiple auctions
+- **pendingReturns mapping:** tracks refundable funds for outbid users
+
+### Core Functions
+
+| Function         | Description                                      |
+| ---------------- | ------------------------------------------------ |
+| `creatAuction()` | Creates a new auction with a given duration      |
+| `bid()`          | Places a bid higher than current highest bid     |
+| `withdraw()`     | Withdraws previous highest bid if outbid         |
+| `endAuction()`   | Ends auction and transfers highest bid to seller |
+
+**Security:** Only the seller can end the auction; users can only withdraw their own funds.
+Deployment & Testing
+
+**Compile & Test Contract**
+
+```text
+forge build
+forge test -vv
 ```
 
-### Format
+**✅ Tests verify**:
 
-```shell
-$ forge fmt
+```text
+Auction creation
+Bidding logic
+Withdraw funds
+End auction
 ```
 
-### Gas Snapshots
+**Deploy on Sepolia Testnet**
 
-```shell
-$ forge snapshot
+```text
+forge script script/SimpleAuction.s.sol:DeployAuction \
+--rpc-url $SEPOLIA_RPC_URL \
+--private-key $PRIVATE_KEY \
+--broadcast -vvvv
 ```
 
-### Anvil
+**Deployed contract address**:0x3860B00e13dDe96A25cff77D5a6a3d080685Cec8
 
-```shell
-$ anvil
+**Verify on Etherscan**
+https://sepolia.etherscan.io/address/0x3860B00e13dDe96A25cff77D5a6a3d080685Cec8#code
+
+### Interacting With the Contract\*\*
+
+**Read State**
+
+```text
+cast call 0x3860B00e13dDe96A25cff77D5a6a3d080685Cec8 "auctionCount() returns (uint256)"
+cast call 0x3860B00e13dDe96A25cff77D5a6a3d080685Cec8 "auctions(uint256) returns (address,address,uint256,uint256,bool)"
 ```
 
-### Deploy
+## Write Functions
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+# Create Auction
+
+```text
+cast send 0x3860B00e13dDe96A25cff77D5a6a3d080685Cec8 "creatAuction(uint256)" 86400 \
+--private-key $PRIVATE_KEY --rpc-url $SEPOLIA_RPC_URL
 ```
 
-### Cast
+# Place Bid
 
-```shell
-$ cast <subcommand>
+```text
+cast send 0x3860B00e13dDe96A25cff77D5a6a3d080685Cec8 "bid(uint256)" 1 \
+--value 1000000000000000000 --private-key $PRIVATE_KEY --rpc-url $SEPOLIA_RPC_URL
 ```
 
-### Help
+# Withdraw Funds
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+```text
+cast send 0x3860B00e13dDe96A25cff77D5a6a3d080685Cec8 "withdraw()" \
+--private-key $PRIVATE_KEY --rpc-url $SEPOLIA_RPC_URL
+```
+
+# End Auction
+
+```text
+cast send 0x3860B00e13dDe96A25cff77D5a6a3d080685Cec8 "endAuction(uint256)" 1 \
+--private-key $PRIVATE_KEY --rpc-url $SEPOLIA_RPC_URL
+```
+
+#### Screenshots / Evidence
+
+- **Test Results**
+  Shows the outcome of all unit tests verifying auction functionality.
+  ![Test Results](screenshots/test_results.png)
+
+- **Deployment Screenshot**
+  Confirms the successful deployment of the SimpleAuction contract.
+  ![Deployment](screenshots/deployment.png)
+
+- **Etherscan Verification**
+  Displays the contract verified on Etherscan for transparency.
+  ![Etherscan Verification](screenshots/etherscan_verification.png)
+
+### Submission Checklist
+
+SimpleAuction.sol (smart contract)
+SimpleAuction.t.sol (unit tests)
+SimpleAuction.s.sol (deployment script)
+Deployed contract address
+Test results and screenshots
+Etherscan verification link
+
+👤 Author
+
+Yihalem M
+
+📄 License
+
+MIT License
+
+```
+
 ```
