@@ -1,66 +1,94 @@
-## Foundry
+# 🪙 ETH Staking Pool
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+A **production-ready Ethereum staking contract** with rewards per second, safe ETH transfers, and reentrancy protection. Includes full Foundry tests and a deployment script.
 
-Foundry consists of:
+---
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## Features
 
-## Documentation
+- Stake ETH and earn rewards per second
+- Safe ETH transfer using `call`
+- ReentrancyGuard protection
+- Events: `Staked` & `Unstaked`
+- Full test suite (staking, rewards, unstake, attack simulation)
+- Deployment script for local or test networks
 
-https://book.getfoundry.sh/
+---
 
 ## Usage
 
-### Build
+### 1️⃣ Deploy
 
-```shell
-$ forge build
+```text
+forge script script/DeployStakingPool.s.sol:DeployStakingPool \
+    --rpc-url $RPC_URL \
+    --private-key $PRIVATE_KEY \
+    --broadcast
 ```
 
-### Test
+    2️⃣ Fund Contract (optional)
 
-```shell
-$ forge test
+The contract can receive ETH:
+
+```text
+receive() external payable {}
 ```
 
-### Format
+3️⃣ Stake ETH
 
-```shell
-$ forge fmt
+```text
+stakingPool.stake{value: 1 ether}();
 ```
 
-### Gas Snapshots
+4️⃣ Calculate Rewards
 
-```shell
-$ forge snapshot
+```text
+stakingPool.calculateReward(user);
 ```
 
-### Anvil
+5️⃣ Unstake ETH + Rewards
 
-```shell
-$ anvil
+```text
+stakingPool.unstake();
 ```
 
-### Deploy
+Testing
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+Run all Foundry tests:
+
+```text
+forge test -vv
 ```
 
-### Cast
+Tests include:
 
-```shell
-$ cast <subcommand>
+```text
+Stake & unstake flows
+
+Reward calculation
+
+Reverts for invalid actions
+
+Reentrancy attack simulation
+
 ```
 
-### Help
+Requirements
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+```text
+
+Solidity ^0.8.20
+
+Foundry (forge & cast)
+
+Optional: Sepolia or local Anvil RPC
+
+```
+
+License
+
+MIT License
+
+```
+
 ```
