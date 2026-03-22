@@ -1,0 +1,6 @@
+[submodule "Week-2-Task"]
+	path = Week-2-Task
+	url = https://github.com/YihalemM/Week-2-Task.git
+[submodule "Week-3-Task"]
+	path = Week-3-Task
+	url = https://github.com/YihalemM/Week-3-Task.git
