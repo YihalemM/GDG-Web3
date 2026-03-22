@@ -1,66 +1,57 @@
-## Foundry
+# SharedWallet
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+A simple **Shared Wallet** smart contract built with Solidity and tested using **Foundry**.  
+It allows users to deposit ETH and lets the owner withdraw funds safely.
 
-Foundry consists of:
+---
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## Features
 
-## Documentation
+- Users can **deposit ETH** into the wallet.
+- Tracks **individual balances** and **total contract balance**.
+- Maintains a **record of all deposits** with timestamp.
+- **Owner-only withdrawals** with balance checks.
+- Fully tested with Foundry for **reliability and safety**.
 
-https://book.getfoundry.sh/
+---
 
-## Usage
+## Deployment
 
-### Build
+Use Foundry to deploy the contract:
 
-```shell
-$ forge build
+```bash
+forge script script/DeploySharedWallet.s.sol:DeploySharedWallet \
+    --rpc-url <RPC_URL> \
+    --private-key <PRIVATE_KEY> \
+    --broadcast
 ```
 
-### Test
+Replace <RPC_URL> with your network endpoint and <PRIVATE_KEY> with your deployer key.
 
-```shell
-$ forge test
-```
+### Testing
 
-### Format
+**Run the full test suite using Foundry:**
 
-```shell
-$ forge fmt
-```
+forge test -vv
 
-### Gas Snapshots
+All tests cover:
+Deposit logic (single/multiple, zero-ETH revert)
+Owner-only withdrawal
+Multi-user deposit tracking
+Full withdrawal scenarios
+Usage
+SharedWallet wallet = SharedWallet(<deployed_address>);
 
-```shell
-$ forge snapshot
-```
+// Deposit
+wallet.deposit{value: 1 ether}();
 
-### Anvil
+// Owner withdraw
+wallet.withdraw(0.5 ether);
 
-```shell
-$ anvil
-```
+### Tech Stack
 
-### Deploy
+Solidity ^0.8.20
+Foundry (forge) for testing and deployment
+License
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+MIT

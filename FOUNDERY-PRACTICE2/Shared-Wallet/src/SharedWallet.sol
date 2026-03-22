@@ -88,14 +88,19 @@ contract SharedWallet {
     // TODO: Implement withdraw()
 
     function withdraw(uint256 amount) public {
-        require(msg.sender == owner, "Only owner can withdraw");
-        require(amount <= totalBalance, "Not enough balance in wallet");
+        require(msg.sender == owner, "only owner can withdraw");
+        require(
+            amount <= address(this).balance,
+            "Insufficient contract balance"
+        );
 
-        // update total balance
         totalBalance -= amount;
 
-        // transfer ETH to owner
-        (bool sent, ) = owner.call{value: amount}("");
+        (bool sent, ) = payable(owner).call{value: amount}("");
         require(sent, "Failed to send Ether");
+    }
+
+    function getDepositsCount() public view returns (uint256) {
+        return deposits.length;
     }
 }
